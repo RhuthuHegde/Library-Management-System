@@ -32,7 +32,7 @@ public class BooksServiceImpl implements BookService{
     public Books findBooksByAuthor(String author) {
        Books book= bookRepository.findBooksByAuthor(author);
        if(book==null) {
-           throw new ResourceNotFoundException("Author not found", "Books", "author", author);
+           throw new ResourceNotFoundException("Author not found");
        }
        return book;
     }
@@ -45,7 +45,7 @@ public class BooksServiceImpl implements BookService{
     @Override
     public Books updatebooks(Long id, Books book) {
         Books updated_book=bookRepository.findById(id).orElseThrow(
-                ()->new ResourceNotFoundException("Book id not found","Books","id",id));
+                ()->new ResourceNotFoundException("Book id not found with id "+id));
         updated_book.setAuthor(book.getAuthor());
         updated_book.setBookName(book.getBookName());
         updated_book.setBookType(book.getBookType());
@@ -57,7 +57,7 @@ public class BooksServiceImpl implements BookService{
     @Override
     public Books deletebooks(Long id) {
         Books delete_book= bookRepository.findById(id).orElseThrow(
-                ()->new ResourceNotFoundException("Book id not found","Books","id",id)
+                ()->new ResourceNotFoundException("Book id not found with id "+id)
         );
         bookRepository.delete(delete_book);
         return delete_book;

@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
         User userName= userRepository.findUserByUserName(name);
         if(userName==null)
         {
-            throw new ResourceNotFoundException("User name not found", "User", "name", name);
+            throw new ResourceNotFoundException("User name not found with "+ name);
         }
         return userName;
     }
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateuser(Long id,User user) {
         User updatedUser=userRepository.findById(id).orElseThrow(
-                ()->new ResourceNotFoundException("User id not found","User","id",id));
+                ()->new ResourceNotFoundException("User id not found with id "+id));
         updatedUser.setUserName(user.getUserName());
         updatedUser.setUserLoc(user.getUserLoc());
         updatedUser.setDob(user.getDob());
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User deleteuser(Long id) {
         User deleteUser=userRepository.findById(id).orElseThrow(
-                ()-> new ResourceNotFoundException("Id is not found for deletion","User","id",id)
+                ()-> new ResourceNotFoundException("User id not found with id "+id)
         );
        userRepository.delete(deleteUser);
        return deleteUser;

@@ -2,6 +2,8 @@ package com.example.librarysystem.Controller;
 import com.example.librarysystem.Models.Books;
 import com.example.librarysystem.Services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,44 +13,45 @@ public class BookController {
     @Autowired
     private BookService bookService;
         @GetMapping("/")
-        public String newPage()
+        public ResponseEntity<String> newPage()
         {
-            return "Welcome to library management system";
+            return new ResponseEntity<>("Welcome to library management system",HttpStatus.OK);
         }
         @GetMapping({"/books"})
-        public List<Books> getbooks()
+        public ResponseEntity<List<Books>> getbooks()
         {
-            return bookService.getAllbooks();
+            List<Books> listBooks=bookService.getAllbooks();
+            return new ResponseEntity<>(listBooks, HttpStatus.OK);
         }
         @GetMapping("/countbooks")
-        public String count()
+        public ResponseEntity<String> count()
         {
             Long val=bookService.count();
-            return "The number of books in the library are: "+val;
+            return new ResponseEntity<>("The number of books in the library are "+val,HttpStatus.OK);
         }
         @GetMapping("/books/{author}")
-        public Books search(@PathVariable String author)
+        public ResponseEntity<Books> search(@PathVariable String author)
         {
-            return bookService.findBooksByAuthor(author);
+           Books bookAuthor=bookService.findBooksByAuthor(author);
+           return new ResponseEntity<>(bookAuthor,HttpStatus.OK);
         }
         @PostMapping("/addbooks")
-        public String add(@RequestBody Books book)
+        public ResponseEntity<String> add(@RequestBody Books book)
         {
-            bookService.savebooks(book);
-            return "book saved with ID "+book.getBookId();
+            Books bookAdded=bookService.savebooks(book);
+            return new ResponseEntity<>("The book is added with the id "+bookAdded.getBookId(),HttpStatus.CREATED);
         }
         @PutMapping("/updatebooks/{bookId}")
-         public String change(@PathVariable Long bookId, @RequestBody Books book)
+         public ResponseEntity<String> change(@PathVariable Long bookId, @RequestBody Books book)
          {
-             bookService.updatebooks(bookId,book);
-             return "The book with following id is updated with new values "+bookId;
+             Books bookChanged= bookService.updatebooks(bookId,book);
+             return new ResponseEntity<>("The book with following id is updated with new values "+bookId+"\n"+bookChanged,HttpStatus.OK);
          }
-
          @DeleteMapping("/deletebook/{bookId}")
-         public String delete(@PathVariable Long bookId)
+         public ResponseEntity<String> delete(@PathVariable Long bookId)
          {
            bookService.deletebooks(bookId);
-             return "The book with following ID has been deleted: "+bookId;
+             return new ResponseEntity<>("The book with following ID has been deleted: "+bookId,HttpStatus.OK);
          }
 
 

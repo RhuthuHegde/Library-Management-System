@@ -4,8 +4,11 @@ import com.example.librarysystem.Models.User;
 import com.example.librarysystem.Repository.UserRepository;
 import com.example.librarysystem.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
 import java.util.List;
 
 @RestController
@@ -13,39 +16,41 @@ public class UserController {
     @Autowired
     private UserService userService;
     @GetMapping({"/users"})
-    public List<User> getbooks()
+    public ResponseEntity<List<User>> getbooks()
     {
-        return userService.getAllusers();
+        List<User> listUser=userService.getAllusers();
+        return new ResponseEntity<>(listUser, HttpStatus.OK);
     }
     @GetMapping("/countusers")
-    public String count()
+    public ResponseEntity<String> count()
     {
         Long value= userService.countusers();
-        return "The number of users subscribed to the library are: "+value;
+        return new ResponseEntity<>("The number of users subscribed to the library are "+value,HttpStatus.OK);
     }
     @GetMapping("/users/{userName}")
-    public User search(@PathVariable String userName)
+    public ResponseEntity<String> search(@PathVariable String userName)
     {
-        return userService.getbyUsername(userName);
+        User searchUser=userService.getbyUsername(userName);
+        return new ResponseEntity<>("The user is"+searchUser,HttpStatus.OK);
     }
     @PostMapping("/addusers")
-    public String add(@RequestBody User user)
+    public ResponseEntity<String> add(@RequestBody User user)
     {
         userService.saveAllusers(user);
-        return "User saved with ID "+user.getUserId();
+        return new ResponseEntity<>("User saved with ID "+user.getUserId(),HttpStatus.CREATED);
     }
     @PutMapping("/updateusers/{userId}")
-    public String change(@PathVariable Long userId, @RequestBody User user)
+    public ResponseEntity<String> change(@PathVariable Long userId, @RequestBody User user)
     {
         userService.updateuser(userId,user);
-        return "The user with following id is updated with new user values "+userId;
+        return new ResponseEntity<>("The user with following id is updated with new user values "+userId,HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteuser/{userId}")
-    public String delete(@PathVariable Long userId)
+    public ResponseEntity<String> delete(@PathVariable Long userId)
     {
         userService.deleteuser(userId);
-        return "The user with following ID has been deleted: "+userId;
+        return new ResponseEntity<>("The user with following ID has been deleted: "+userId,HttpStatus.OK);
     }
 
 }
