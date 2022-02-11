@@ -19,6 +19,19 @@ public class BooksServiceImpl implements BookService{
     }
 
     @Override
+    public Books findById(Long id) {
+//        Optional<Books> book= bookRepository.findById(id);
+//        if(book==null)
+//        {
+//            throw new ResourceNotFoundException("Id not found");
+//        }
+//            return book;
+        return bookRepository.findById(id).orElseThrow(
+                ()-> new ResourceNotFoundException("Book id not found with id "+id)
+        );
+    }
+
+    @Override
     public Books savebooks(Books book) {
         return bookRepository.save(book);
     }

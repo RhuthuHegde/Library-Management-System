@@ -1,6 +1,9 @@
 package com.example.librarysystem.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import javax.persistence.criteria.Fetch;
 
 @Entity
 @Table(name="Books")
@@ -8,7 +11,7 @@ public class Books {
     @Id
     @Column(name = "book_id", nullable = false)
     @GeneratedValue(strategy=GenerationType.AUTO,generator = "book_generator")
-    @SequenceGenerator(name="book_generator",allocationSize = 1,sequenceName = "bookSequence")
+    @SequenceGenerator(name="book_generator",initialValue = 1,allocationSize = 1,sequenceName = "bookSequence")
     private Long bookId;
     @Column
     private String bookName;
@@ -18,6 +21,10 @@ public class Books {
     private String bookType;
     @Column
     private String bookPublished;
+
+    @ManyToOne
+    @JoinColumn(name="fk_user_id",referencedColumnName = "user_id",nullable = false)
+    private User user;
 
     public Books(String bookName, String author, String bookType, String bookPublished) {
         this.bookName = bookName;
@@ -70,6 +77,14 @@ public class Books {
         this.bookPublished = bookPublished;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         return "Books{" +
@@ -79,5 +94,9 @@ public class Books {
                 ", bookType='" + bookType + '\'' +
                 ", bookPublished='" + bookPublished + '\'' +
                 '}';
+    }
+
+    public void assign(User user) {
+        this.user=user;
     }
 }

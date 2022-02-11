@@ -37,7 +37,7 @@ public class UserController {
     public ResponseEntity<String> add(@RequestBody User user)
     {
         userService.saveAllusers(user);
-        return new ResponseEntity<>("User saved with ID "+user.getUserId(),HttpStatus.CREATED);
+        return new ResponseEntity<>("User saved with ID "+user.getUserId()+user,HttpStatus.CREATED);
     }
     @PutMapping("/updateusers/{userId}")
     public ResponseEntity<String> change(@PathVariable Long userId, @RequestBody User user)

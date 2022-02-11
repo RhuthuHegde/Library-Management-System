@@ -1,6 +1,9 @@
 package com.example.librarysystem.Controller;
+import com.example.librarysystem.Exception.ResourceNotFoundException;
 import com.example.librarysystem.Models.Books;
+import com.example.librarysystem.Models.User;
 import com.example.librarysystem.Services.BookService;
+import com.example.librarysystem.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +15,8 @@ import java.util.List;
 public class BookController {
     @Autowired
     private BookService bookService;
+    @Autowired
+    private UserService userService;
         @GetMapping("/")
         public ResponseEntity<String> newPage()
         {
@@ -46,6 +51,16 @@ public class BookController {
          {
              Books bookChanged= bookService.updatebooks(bookId,book);
              return new ResponseEntity<>("The book with following id is updated with new values "+bookId+"\n"+bookChanged,HttpStatus.OK);
+         }
+         //getting book and user by their ids
+         @PutMapping("/user/{userId}/books/{bookId}")
+         public ResponseEntity<Books> assignUsertoBooks (@PathVariable Long bookId,@PathVariable Long userId)
+         {
+             User user = userService.findById(userId);
+             Books book = bookService.findById(bookId);
+             book.assign(user);
+             bookService.updatebooks(bookId, book);
+             return new ResponseEntity<>(book, HttpStatus.CREATED);
          }
          @DeleteMapping("/deletebook/{bookId}")
          public ResponseEntity<String> delete(@PathVariable Long bookId)

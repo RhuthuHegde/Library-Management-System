@@ -1,0 +1,24 @@
+version: "3.7"
+services:
+  mysqldb:
+    container_name: mysqldb
+    image: mysql:8.0
+    ports:
+    - "3307:3306"
+    environment:
+      MYSQL_DATABASE: librarySystem
+      MYSQL_USER: library
+      MYSQL_PASSWORD: Library@books123
+      MYSQL_ROOT_PASSWORD: Library@books123
+  libsystem:
+    container_name: libsystem
+    build: .
+    image: librarysystem-spring:3
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysqldb
+
+
+
+

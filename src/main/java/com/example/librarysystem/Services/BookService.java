@@ -6,6 +6,8 @@ import java.util.List;
 
 
 public interface BookService {
+    //find books by id
+    Books findById(Long id);
     //adding the books to DB
     Books savebooks(Books book);
     //gets all the books saved

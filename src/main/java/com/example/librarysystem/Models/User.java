@@ -1,6 +1,9 @@
 package com.example.librarysystem.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="Users")
@@ -8,7 +11,7 @@ public class User {
     @Id
     @Column(name = "user_id", nullable = false)
     @GeneratedValue(strategy=GenerationType.AUTO,generator = "user_generator")
-    @SequenceGenerator(name="user_generator",allocationSize = 1,sequenceName = "userSequence")
+    @SequenceGenerator(name="user_generator",initialValue = 1,allocationSize = 1,sequenceName = "userSequence")
     private Long userId;
     @Column
     private String userName;
@@ -16,6 +19,12 @@ public class User {
     private String dob;
     @Column
     private String userLoc;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",targetEntity = Books.class
+            ,cascade = CascadeType.ALL
+    )
+    private List<Books> books;
 
     public User(String userName, String dob, String userLoc) {
         this.userName = userName;
@@ -57,6 +66,14 @@ public class User {
 
     public void setUserLoc(String userLoc) {
         this.userLoc = userLoc;
+    }
+
+    public List<Books> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Books> books) {
+        this.books = books;
     }
 
     @Override
