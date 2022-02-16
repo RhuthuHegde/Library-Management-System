@@ -1,9 +1,5 @@
 package com.example.librarysystem.Models;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
-import javax.persistence.criteria.Fetch;
 
 @Entity
 @Table(name="Books")

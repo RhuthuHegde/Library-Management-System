@@ -25,8 +25,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public BookOrder deleteorder(Long id) {
-        return orderRepository.findById(id).orElseThrow(
+    public OrderRepository deleteorder(Long id) {
+        BookOrder order = orderRepository.findById(id).orElseThrow(
                 ()-> new ResourceNotFoundException("Order id not found with id "+id));
+        orderRepository.delete(order);
+        return orderRepository;
     }
 }

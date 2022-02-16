@@ -1,8 +1,8 @@
 package com.example.librarysystem.Services;
 
 import com.example.librarysystem.Models.BookOrder;
+import com.example.librarysystem.Repository.OrderRepository;
 
-import java.awt.print.Book;
 import java.util.List;
 
 public interface OrderService {
@@ -12,5 +12,5 @@ public interface OrderService {
 //    listing all orders from repository
     List<BookOrder> getAllorders();
     //delete the order for the list
-    BookOrder deleteorder(Long id);
+    OrderRepository deleteorder(Long id);
 }

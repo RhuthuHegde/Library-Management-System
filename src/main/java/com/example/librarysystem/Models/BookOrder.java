@@ -1,4 +1,5 @@
 package com.example.librarysystem.Models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -8,16 +9,21 @@ public class BookOrder {
     @Id
     @Column(name = "order_id", nullable = false)
     @GeneratedValue(strategy=GenerationType.AUTO,generator = "order_generator")
-    @SequenceGenerator(name="order_generator",allocationSize = 1,sequenceName = "orderSequence")
-
+    @SequenceGenerator(name="order_generator",initialValue = 1,allocationSize = 1,sequenceName = "orderSequence")
     private Long orderId;
+
     @Column
-    private String isbnNo;
+    private String bookName;
+
     @Column
     private String bookingDate;
 
-    public BookOrder(String isbnNo, String bookingDate) {
-        this.isbnNo = isbnNo;
+    @ManyToOne
+    @JoinColumn(name="fk_user_id", referencedColumnName = "user_id",nullable = false)
+    private User userOrder;
+
+    public BookOrder(String bookName, String bookingDate) {
+        this.bookName = bookName;
         this.bookingDate = bookingDate;
     }
 
@@ -33,12 +39,12 @@ public class BookOrder {
         this.orderId = orderId;
     }
 
-    public String getIsbnNo() {
-        return isbnNo;
+    public String getBookName() {
+        return bookName;
     }
 
-    public void setIsbnNo(String isbnNo) {
-        this.isbnNo = isbnNo;
+    public void setBookName(String isbnNo) {
+        this.bookName = isbnNo;
     }
 
     public String getBookingDate() {
@@ -49,11 +55,19 @@ public class BookOrder {
         this.bookingDate = bookingDate;
     }
 
+    public User getUserOrder() {
+        return userOrder;
+    }
+
+    public void setUserOrder(User userOrder) {
+        this.userOrder = userOrder;
+    }
+
     @Override
     public String toString() {
         return "BookOrder{" +
                 "orderId=" + orderId +
-                ", isbnNo='" + isbnNo + '\'' +
+                ", bookName='" + bookName + '\'' +
                 ", bookingDate='" + bookingDate + '\'' +
                 '}';
     }
